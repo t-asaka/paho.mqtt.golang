@@ -18,8 +18,6 @@ import (
 	"errors"
 	"sync/atomic"
 	"time"
-
-	"github.com/eclipse/paho.mqtt.golang/packets"
 )
 
 func keepalive(c *client) {
@@ -50,11 +48,11 @@ func keepalive(c *client) {
 			if time.Since(lastSent) >= time.Duration(c.options.KeepAlive*int64(time.Second)) || time.Since(lastReceived) >= time.Duration(c.options.KeepAlive*int64(time.Second)) {
 				if atomic.LoadInt32(&c.pingOutstanding) == 0 {
 					DEBUG.Println(PNG, "keepalive sending ping")
-					ping := packets.NewControlPacket(packets.Pingreq).(*packets.PingreqPacket)
+					// ping := packets.NewControlPacket(packets.Pingreq).(*packets.PingreqPacket)
 					//We don't want to wait behind large messages being sent, the Write call
 					//will block until it it able to send the packet.
 					atomic.StoreInt32(&c.pingOutstanding, 1)
-					ping.Write(c.conn)
+					// ping.Write(c.conn)
 					c.lastSent.Store(time.Now())
 					pingSent = time.Now()
 				}
